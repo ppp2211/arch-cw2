@@ -1,9 +1,17 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <stdint.h>
+#include <cstdlib>
+
 using namespace std;
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]){	
+	
+	unsigned addr_bits = atoi(argv[1]);
+	unsigned mem_size = (1 << addr_bits);
+	vector<uint8_t> mem (mem_size, 0);
 	
 	string line;
 	

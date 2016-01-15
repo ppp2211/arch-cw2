@@ -7,7 +7,7 @@
 class set{
 
 	public:
-		set(int bw, int wb, int bs);
+		set(int bs);
 		~set();
 		
 	private:

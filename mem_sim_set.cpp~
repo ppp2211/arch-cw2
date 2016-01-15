@@ -1,0 +1,7 @@
+#include "mem_sim_set.hpp"
+
+set::set(int bs)
+	: blocks(bs)
+	{}
+
+set::~set(){}

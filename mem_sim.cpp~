@@ -1,9 +1,17 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <stdint.h>
+#include <cstdlib>
+
 using namespace std;
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]){	
+	
+	unsigned addr_bits = atoi(argv[1]);
+	unsigned mem_size = (1 << addr_bits);
+	vector<uint8_t> mem (mem_size, 0);
 	
 	string line;
 	
@@ -21,7 +29,7 @@ int main(int argc, char *argv[]){
 					unsigned addr;
 					row >> addr;
 					
-					cout << " r ";	
+					cout << "read-ack " << addr << endl;	
 				
 				}
 			
@@ -29,15 +37,16 @@ int main(int argc, char *argv[]){
 				
 					unsigned addr, data;
 					row >> addr >> data;
-					cout << " w ";	
+					cout << "write-ack " << addr << " " << data << endl;	
 				}
 				
 				else if(cmd == "flush-req"){
-					cout << " f ";	
+					cout << "flush-ack " << endl;	
 				}
 			
 				else if(cmd == "debug-req"){
-					cout << " d ";	
+					cout << "debug-ack-begin" << endl;
+					cout << "debug-ack-end" << endl;	
 				}
 			}
 		}

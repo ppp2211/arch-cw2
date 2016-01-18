@@ -4,12 +4,23 @@
 #include <vector>
 #include <stdint.h>
 #include <cstdlib>
+#include "mem_sim_cache.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[]){	
 	
 	unsigned addr_bits = atoi(argv[1]);
+	unsigned bperword = atoi(argv[2]);
+	unsigned wperblock = atoi(argv[3]);
+	unsigned blockperset = atoi(argv[4]);
+	unsigned nsets = atoi(argv[5]);
+	unsigned clhit = atoi(argv[6]);
+	unsigned clread = atoi(argv[7]);
+	unsigned clwrite = atoi(argv[7]);
+	
+	cache mycache(bperword,wperblock,blockperset,nsets,clhit,clread,clwrite);
+	
 	unsigned mem_size = (1 << addr_bits);
 	vector<uint8_t> mem (mem_size, 0);
 	
@@ -25,17 +36,43 @@ int main(int argc, char *argv[]){
 			row >> cmd;
 			
 				if(cmd == "read-req"){
-			
-					unsigned addr;
+					cout << "read-ack ";
+					
+					uint32_t addr;
 					row >> addr;
 					
-					cout << "read-ack " << addr << endl;	
+					vector<uint8_t> data;
+					int index;
+					
+					bool hit = mycache.cache_read(addr, data, index);
+					
+					cout << index << " ";
+					
+					if(hit){
+						cout << "hit " << clhit << data << endl;
+					}
+					else{
+						
+						int time(0);
+						
+						data = mem[addr];						
+						vector<uint8_t> evicted;
+						int etag;
+						
+						if(mycache.loadin(addr, data, evicted, etag){
+							
+						}
+						
+						cout << "miss " << time << data << endl;
+					}
+											
+					
 				
 				}
 			
 				else if(cmd == "write-req"){
 				
-					unsigned addr, data;
+					uint32_t addr, data;
 					row >> addr >> data;
 					cout << "write-ack " << addr << " " << data << endl;	
 				}

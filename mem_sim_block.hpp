@@ -12,6 +12,18 @@ using namespace std;
 			block(int bw, int wb);
 			~block();
 			
+			bool tag_match(int searchtag) const;			
+			bool is_valid() const;
+			bool is_dirty() const;
+			
+			void read_data(vector<uint8_t> &dest) const;
+			int get_tag() const;
+			
+			void validate();
+			void dirty();
+			void clean();
+			void store(vector<uint8_t> &src, int newtag);
+			
 		private:
 			int tag;
 			bool valid;

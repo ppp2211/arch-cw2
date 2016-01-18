@@ -8,3 +8,43 @@ block::block(int bw, int wb)
 	{}
 	
 block::~block(){}
+
+bool block::tag_match(int searchtag) const{
+	if(tag == searchtag){
+		return true;
+	}
+	else return false;
+}
+bool block::is_valid() const{
+ 	return valid;
+}
+
+bool block::is_dirty() const{
+	return dirty;
+}
+
+void block::read_data(vector<uint8_t> &dest) const{
+	for(unsigned i = 0; i < data.size(); i++){
+		dest[i] = data[i];
+	}
+}
+
+void block::validate(){
+	valid = true;
+}
+
+void dirty(){
+	dirty = true;
+}
+
+void clean(){
+	dirty = false;
+}
+
+void store(vector<uint8_t> &src, int newtag){
+	for(unsigned i = 0; i < src.size(); i++){
+		data[i] = src[i];
+	}
+	tag = newtag;
+	valid();
+}

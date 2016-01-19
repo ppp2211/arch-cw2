@@ -23,7 +23,7 @@ bool cache::cache_loadin(uint32_t addr, const vector<uint8_t> &data, vector<uint
 	
 	bool was_dirty = sets[index_gen(addr)].loadin(tag_gen(addr), data, evicted, etag);	
 		
-	return was_dirty
+	return was_dirty;
 }
 
 int index_gen(uint32_t addr){
@@ -33,7 +33,10 @@ int index_gen(uint32_t addr){
 }
 
 int cache::tag_gen(uint32_t addr){
-	return unsigned(addr) >> (msb1(blocks) + 1);	
+		div_t wordaddr = div(addr,bytes);
+		div_t blockaddr = div(wordaddr.quot,wordblk);
+		div_t tag = div(blockaddr.quot,nsets);
+	return tag.quot;
 }
 
 int msb1(uint32_t n){

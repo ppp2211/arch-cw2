@@ -32,6 +32,6 @@ class cache{
 		int cl_write;
 };
 
-int msb1(uint32_t n);
+//int msb1(uint32_t n);
 
 #endif

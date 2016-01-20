@@ -33,18 +33,18 @@ void block::validate(){
 	valid = true;
 }
 
-void dirty(){
+void block::dirt(){
 	dirty = true;
 }
 
-void clean(){
+void block::clean(){
 	dirty = false;
 }
 
-void store(vector<uint8_t> &src, int newtag){
+void block::store(vector<uint8_t> &src, int newtag){
 	for(unsigned i = 0; i < src.size(); i++){
 		data[i] = src[i];
 	}
 	tag = newtag;
-	valid();
+	validate();
 }

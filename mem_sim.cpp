@@ -49,18 +49,25 @@ int main(int argc, char *argv[]){
 					cout << index << " ";
 					
 					if(hit){
-						cout << "hit " << clhit << data << endl;
+						cout << "hit " << clhit << hex; 
+						
+						for (unsigned i = 0; i < data.size() ; i++){
+							cout << data[i];
+						}
+						cout << dec << endl;
 					}
 					else{
 						
 						int time(0);
 						
-						data = mem[addr];						
+						data = mem[addr];		// fix this first - handle as vectors not as a retard				
 						vector<uint8_t> evicted;
 						int etag;
 						
 						if(mycache.loadin(addr, data, evicted, etag){
-							
+							for (i = 0 ; i < wperblock * bperword ; i++) {
+ 								 memory[etag + i] = evicted[i]; 
+							}
 						}
 						
 						cout << "miss " << time << data << endl;

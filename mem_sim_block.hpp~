@@ -17,6 +17,7 @@ using namespace std;
 			bool is_dirty() const;
 			
 			void read_data(vector<uint8_t> &dest) const;
+			int get_tag() const;
 			
 			void validate();
 			void dirty();

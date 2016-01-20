@@ -28,6 +28,7 @@ bool loadin(int tag, const vector<uint8_t> &data, vector<uint8_t> &evicted, int 
 	
 	if(blocks.back().is_dirty()){
 		blocks.back().read_data(evicted);
+		etag = blocks.back().get_tag();
 		was_dirty = true;
 	}
 	blocks.pop_back();

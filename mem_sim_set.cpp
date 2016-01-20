@@ -33,7 +33,7 @@ bool loadin(int tag, const vector<uint8_t> &data, vector<uint8_t> &evicted, int 
 	}
 	blocks.pop_back();
 	
-	block newblk(bw,wb);
+	block newblk(bytes,words);
 	newblk.store(data,tag);
 	blocks.push_front(newblk);
 	

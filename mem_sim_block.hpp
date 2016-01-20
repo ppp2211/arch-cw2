@@ -20,7 +20,7 @@ using namespace std;
 			int get_tag() const;
 			
 			void validate();
-			void dirty();
+			void dirt();
 			void clean();
 			void store(vector<uint8_t> &src, int newtag);
 			

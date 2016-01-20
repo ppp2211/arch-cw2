@@ -46,5 +46,5 @@ void block::store(vector<uint8_t> &src, int newtag){
 		data[i] = src[i];
 	}
 	tag = newtag;
-	valid();
+	validate();
 }

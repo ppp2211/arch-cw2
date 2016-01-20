@@ -26,7 +26,7 @@ bool cache::cache_loadin(uint32_t addr, const vector<uint8_t> &data, vector<uint
 	return was_dirty;
 }
 
-int index_gen(uint32_t addr){
+int cache::index_gen(uint32_t addr){
 	div_t wordaddr = div(addr,bytes);
 	div_t blockaddr = div(wordaddr.quot,wordblk);
 	return blockaddr.quot % nsets;

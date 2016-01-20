@@ -19,7 +19,7 @@ bool cache::cache_read(uint32_t addr,vector<uint8_t> &data, int &index) {
 	
 }
 
-bool cache::cache_loadin(uint32_t addr, const vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
+bool cache::cache_loadin(uint32_t addr,vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
 	
 	bool was_dirty = sets[index_gen(addr)].loadin(addr, data, evicted, etag);	
 		

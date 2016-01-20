@@ -23,6 +23,10 @@ bool block::is_dirty() const{
 	return dirty;
 }
 
+int block::get_tag() const{
+	return tag;
+}
+
 void block::read_data(vector<uint8_t> &dest) const{
 	for(unsigned i = 0; i < data.size(); i++){
 		dest[i] = data[i];

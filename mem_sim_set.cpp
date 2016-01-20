@@ -23,7 +23,7 @@ bool set::getdata(int tag, vector<uint8_t> &data){
 			
 }
 
-bool loadin(int tag, const vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
+bool set::loadin(int tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
 	bool was_dirty = false;
 	
 	if(blocks.back().is_dirty()){

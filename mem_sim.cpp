@@ -60,17 +60,27 @@ int main(int argc, char *argv[]){
 						
 						int time(0);
 						
-						data = mem[addr];		// fix this first - handle as vectors not as a retard				
+						//data = mem[addr];
+						
+						for (unsigned i = 0; i < wperblock * bperword ; i++){
+							data[i] = mem[addr+i];
+						}
+									
 						vector<uint8_t> evicted;
 						int etag;
 						
-						if(mycache.loadin(addr, data, evicted, etag){
-							for (i = 0 ; i < wperblock * bperword ; i++) {
- 								 memory[etag + i] = evicted[i]; 
+						if(mycache.cache_loadin(addr, data, evicted, etag)){
+							for (unsigned i = 0 ; i < wperblock * bperword ; i++) {
+ 								 mem[etag + i] = evicted[i]; 
 							}
 						}
 						
-						cout << "miss " << time << data << endl;
+						cout << "miss " << time;
+						
+						for (unsigned i = 0; i < data.size() ; i++){
+							cout <<" " << data[i];
+						}
+						cout << endl;
 					}
 											
 					

@@ -1,10 +1,1 @@
 write-ack 0 0
-read-ack 0 miss 
-write-ack 4 2211
-write-ack 6 4422
-read-ack 1 miss 
-read-ack 1 miss 
-read-ack 0 miss 
-write-ack 16 1234
-read-ack 0 miss 
-read-ack 0 miss 

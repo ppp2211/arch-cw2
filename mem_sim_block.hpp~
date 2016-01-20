@@ -20,9 +20,9 @@ using namespace std;
 			int get_tag() const;
 			
 			void validate();
-			void dirty();
+			void dirt();
 			void clean();
-			void store(vector<uint8_t> &src, int newtag);
+			void store(const vector<uint8_t> &src, int newtag);
 			
 		private:
 			int tag;

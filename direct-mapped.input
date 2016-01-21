@@ -5,6 +5,9 @@ write-req 0 FF11
 read-req 0
 write-req 4 2211
 write-req 6 4422
+write-req 12 1122
+write-req 14 3344
+flush-req
 read-req 4
 read-req 6
 read-req 0

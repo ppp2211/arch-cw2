@@ -17,7 +17,11 @@ class cache{
 		int index_gen(uint32_t addr);
 		
 		bool cache_read(uint32_t addr, vector<uint8_t> &data, int &index);
+		bool cache_store(uint32_t addr,vector<uint8_t> &data);
 		bool cache_loadin(uint32_t addr,vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
+		bool cache_loadin_dirty(uint32_t addr,vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
+		
+		void cache_flush(vector<uint8_t> &toflush, vector<unsigned> &tags);
 		
 	private:
 	

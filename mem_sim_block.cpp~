@@ -52,3 +52,18 @@ void block::store(vector<uint8_t> &src, unsigned newtag){
 	tag = newtag;
 	validate();
 }
+
+void block::replace_data(vector<uint8_t> &src){
+	for(unsigned i = 0; i < src.size(); i++){
+		data[i] = src[i];
+	}
+	dirt();
+}
+
+void block::flush(vector<uint8_t> &toflush, vector<unsigned> &tags){
+	for(unsigned i = 0; i < data.size(); i++){
+		toflush.push_back(data[i])
+	}
+	tags.push_back(tag);
+	clean();
+}

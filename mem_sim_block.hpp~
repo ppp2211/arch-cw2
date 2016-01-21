@@ -23,6 +23,8 @@ using namespace std;
 			void dirt();
 			void clean();
 			void store(vector<uint8_t> &src, unsigned newtag);
+			void replace_data(vector<uint8_t> &src);
+			void flush(vector<uint8_t> &dest, vector<unsigned> &tags);
 			
 		private:
 			unsigned tag;

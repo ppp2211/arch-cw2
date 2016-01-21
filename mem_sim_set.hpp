@@ -11,8 +11,10 @@ class set{
 		~set();
 		
 		bool getdata(unsigned tag, vector<uint8_t> &data);
+		bool storedata(unsigned tag, vector<uint8_t> &data);
 		bool loadin(unsigned tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
-		
+		bool loadin_dirty(unsigned tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
+		void flush(vector<uint8_t> &toflush, vector<unsigned> &tags);
 	private:
 		list<block> blocks;	
 		int bytes;

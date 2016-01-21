@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip> 
 #include <string>
 #include <sstream>
 #include <vector>
@@ -49,17 +50,21 @@ int main(int argc, char *argv[]){
 					cout << index << " ";
 					
 					unsigned woffset = (addr/bperword) % wperblock;
+					unsigned offset = woffset*bperword;
 					
-					cout << "addr " << addr;
-					cout << " woffset " << woffset << " ";
+					//cout << dec << "addr " << addr;
 					
 					if(hit){
-						cout << "hit " << clhit << " "; 
+						cout << "hit " << clhit << " ";
 						
-						unsigned offset = (wperblock-woffset-1)*bperword;
+						/*cout << " DATA LOADED " << endl;
+						for(unsigned i = 0; i < data.size(); i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}
+							cout << endl;*/					
 											
 						for (unsigned i = offset; i < offset+bperword ; i++){
-							cout << hex << unsigned(data[i]);
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
 						}
 						
 						cout << endl;
@@ -67,10 +72,12 @@ int main(int argc, char *argv[]){
 					
 					else{
 						
-						int time(0);
+						int time = clhit + clread;
+						
+						unsigned blockaddr = ((addr/wperblock)/bperword) * wperblock * bperword;
 														
-						for (unsigned i = 0; i < wperblock * bperword ; i++){						
-							data.push_back(mem[addr+i]);
+						for (unsigned i = 0; i < wperblock * bperword ; i++){
+							data.push_back(mem[blockaddr+i]);
 						}
 									
 						vector<uint8_t> evicted;
@@ -78,17 +85,18 @@ int main(int argc, char *argv[]){
 						
 						if(mycache.cache_loadin(addr, data, evicted, etag)){
 							for (unsigned i = 0 ; i < wperblock * bperword ; i++) {
- 								 mem[etag + i] = evicted[i]; 
+ 								 mem[(etag*wperblock*bperword) + i] = evicted[i]; 
 							}
+							time += clwrite;
 						}
 						
-						cout << "miss " << time << " ";
+						cout << "miss " << time << " ";						
 						
-						
-						for (unsigned i = (wperblock-woffset-1)*bperword; i < bperword ; i++){
-							cout << hex << unsigned(data[i]);
-						}
-							
+						unsigned offset = woffset*bperword;
+											
+						for (unsigned i = offset; i < offset+bperword ; i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}							
 						
 						data.clear();
 						cout << endl;
@@ -98,13 +106,20 @@ int main(int argc, char *argv[]){
 				
 				}
 			
-				/*else if(cmd == "write-req"){ // write code for a hit too pls fix too - get a hex
+				else if(cmd == "write-req"){
 				
 					cout << "write-ack ";
 					
 					unsigned addr;
-					unsigned tostore;
+					unsigned long long tostore;
 					row >> addr >> hex >> tostore; 
+					
+					vector<uint8_t> store;
+					
+					for (unsigned i = 0; i < bperword ; i++){	
+						uint8_t byte = (tostore >> ((bperword - (i+1)) * 8));
+						store.push_back(byte);				
+					}
 					
 					vector<uint8_t> data;
 					int index;
@@ -114,47 +129,98 @@ int main(int argc, char *argv[]){
 					cout << index << " ";
 					
 					unsigned woffset = (addr/bperword) % wperblock;
-					
-					for (unsigned i = 0; i < bperword ; i++){	
-						uint8_t byte = (tostore >> ((bperword - (i+1)) * 8));				
-					}
+					unsigned offset = woffset*bperword;
 					
 					if(hit){
-						cout << "hit " << clhit << " "; 
-											
-						for (unsigned i = woffset*bperword; i < bperword ; i++){
-							cout << hex << unsigned(data[i]);
+						for(unsigned i = offset; i < offset+bperword; i++){
+							data[i] = store[i-offset];
 						}
 						
+						/*cout << " DATA SAVED " << endl;
+						for(unsigned i = 0; i < data.size(); i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}
+							cout << endl;
+						*/
+							
+						mycache.cache_store(addr,data);
+						
+						cout << "hit " << clhit << " ";					
+											
+						/*for (unsigned i = offset; i < offset+bperword ; i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}*/
+						
+						cout << endl;
+						
+					}
+					else{
+						
+						int time = clhit + clread;
+						
+						unsigned blockaddr = ((addr/wperblock)/bperword) * wperblock * bperword;
+											
+						for (unsigned i = 0; i < wperblock * bperword ; i++){
+							data.push_back(mem[blockaddr+i]);
+						}
+						
+						for(unsigned i = offset; i < offset+bperword; i++){
+							data[i] = store[i-offset];
+						}
+						
+						/*	cout << " DATA SAVED " << endl;
+						for(unsigned i = 0; i < data.size(); i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}
+							cout << endl;*/
+									
+						vector<uint8_t> evicted;
+						int etag;
+						
+						if(mycache.cache_loadin_dirty(addr, data, evicted, etag)){
+							for (unsigned i = 0 ; i < wperblock * bperword ; i++) {
+ 								 mem[(etag*wperblock*bperword) + i] = evicted[i]; 
+							}
+							time += clwrite;
+						}
+						
+						cout << "miss " << time << " ";						
+						
+						unsigned offset = woffset*bperword;
+											
+						/*for (unsigned i = offset; i < offset+bperword ; i++){
+							cout << hex << setfill('0') << setw(2) << unsigned(data[i]);
+						}*/							
+						
+						data.clear();
 						cout << endl;
 					}
 					
-					if 
-						
-								
-					vector<uint8_t> evicted;
-					int etag;
-						
-					if(mycache.cache_loadin(addr, data, evicted, etag)){
-						for (unsigned i = 0 ; i < wperblock * bperword ; i++) {
- 							 mem[etag + i] = evicted[i]; 
-						}
-					}
-						
-					cout << "miss " << time << " ";
-						
-						
-					for (unsigned i = 0; i < data.size() ; i++){
-						cout << hex << unsigned(data[i]);
-						
-					}
-					data.clear();
-																								
-					cout << endl;	
-				}*/
+					
+					
+				}
 				
 				else if(cmd == "flush-req"){
-					cout << "flush-ack " << endl;	
+					cout << "flush-ack " << endl;
+					vector<uint8_t> toflush;
+					vector<unsigned> tags;
+					
+					mycache.cache_flush(toflush, tags);
+					
+					int time(0);
+					
+					for(unsigned i = 0; i < tags.size(); i++){
+						for(unsigned j = 0; j < wperblock*bperword; j++){
+							mem[(tags[i]*wperblock*bperword)+j] = toflush[(i*wperblock*bperword)+j];
+							time += clwrite;
+						}
+					}
+					cout << "memory contents" << endl;
+					for(unsigned i = 0; i < mem.size(); i++){
+							cout << dec << i << " " << hex << setfill('0') << setw(2) << unsigned(mem[i]) << endl;
+						}
+					
+					cout << time << endl;
 				}
 			
 				else if(cmd == "debug-req"){

@@ -1,4 +1,5 @@
 #include "mem_sim_cache.hpp"
+#include <iostream> // delete this plz
 
 cache::cache(int bw, int wblk, int nblk, int nset, int clh, int clr, int clw)
 	: sets (nset, set(bw, wblk, nblk))
@@ -13,15 +14,19 @@ cache::cache(int bw, int wblk, int nblk, int nset, int clh, int clr, int clw)
 	
 cache::~cache(){}
 
-bool cache::cache_read(uint32_t addr,vector<uint8_t> &data, int &index) {
+bool cache::cache_read(unsigned addr,vector<uint8_t> &data, int &index) {
 		
-	return sets[index_gen(addr)].getdata(addr, data);
+	index = index_gen(addr);
+	cout << "index generated " << endl;
+	return sets[index].getdata(addr, data);
+	cout << "sets returned" << endl;
 	
 }
 
-bool cache::cache_loadin(uint32_t addr, const vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
-	
-	bool was_dirty = sets[index_gen(addr)].loadin(addr, data, evicted, etag);	
+bool cache::cache_loadin(unsigned addr,vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
+	int index = index_gen(addr);
+	cout << "index generated " << endl;
+	bool was_dirty = sets[index].loadin(addr, data, evicted, etag);	
 		
 	return was_dirty;
 }

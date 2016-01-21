@@ -23,10 +23,13 @@ int main(int argc, char *argv[]){
 	
 	unsigned mem_size = (1 << addr_bits);
 	vector<uint8_t> mem (mem_size, 0);
-	
+		
 	string line;
 	
 	while(getline(cin,line)){
+	
+	vector<uint8_t> data;
+	int index;
 		
 		if(line.at(0) != '#'){
 			
@@ -38,33 +41,42 @@ int main(int argc, char *argv[]){
 				if(cmd == "read-req"){
 					cout << "read-ack ";
 					
-					uint32_t addr;
+					unsigned addr;
 					row >> addr;
 					
-					vector<uint8_t> data;
-					int index;
+					//cout << addr << endl;
 					
+					//cout << "before hit check " << endl;
 					bool hit = mycache.cache_read(addr, data, index);
-					
+					//cout << "after hit check " << endl;
+										
 					cout << index << " ";
 					
 					if(hit){
-						cout << "hit " << clhit << hex; 
+						cout << "hit " << clhit << " "; 
+						
+						//cout << "before hit cout" << endl;
+				
 						
 						for (unsigned i = 0; i < data.size() ; i++){
-							cout << data[i];
+							cout << i << "=" << unsigned(data[i]) << " ";
 						}
-						cout << dec << endl;
+						
+						cout << endl;
 					}
+					
 					else{
 						
 						int time(0);
-						
-						//data = mem[addr];
-						
+												
+						//cout << " before mem load " << endl;
+												
 						for (unsigned i = 0; i < wperblock * bperword ; i++){
-							data[i] = mem[addr+i];
+						
+							data.push_back(mem[addr+i]);
 						}
+						
+						//cout << "after mem load" << endl;
 									
 						vector<uint8_t> evicted;
 						int etag;
@@ -75,11 +87,14 @@ int main(int argc, char *argv[]){
 							}
 						}
 						
-						cout << "miss " << time;
+						cout << "miss " << time << " ";
+						
 						
 						for (unsigned i = 0; i < data.size() ; i++){
-							cout <<" " << data[i];
+							cout << i << "=" << unsigned(data[i]) << " ";
+							
 						}
+						data.clear();
 						cout << endl;
 					}
 											
@@ -87,11 +102,44 @@ int main(int argc, char *argv[]){
 				
 				}
 			
-				else if(cmd == "write-req"){
+				else if(cmd == "write-req"){ // write code for a hit too pls
 				
-					uint32_t addr, data;
-					row >> addr >> data;
-					cout << "write-ack " << addr << " " << data << endl;	
+					cout << "write-ack ";
+					
+					unsigned addr;
+					uint32_t tostore;
+					row >> addr >> tostore;
+					
+					cout << "tostore " << hex << unsigned(tostore) << endl;
+					
+					for (unsigned i = 0; i < wperblock * bperword ; i++){	
+						uint8_t byte = (tostore >> ((wperblock*bperword - (i+1)) * 8));				
+						cout << "byte " << hex << unsigned(byte) << endl;
+						cout << " shift " << ((wperblock*bperword - (i+1)) * 8) << endl;
+						data.push_back(byte);
+					}
+						
+								
+					vector<uint8_t> evicted;
+					int etag;
+						
+					if(mycache.cache_loadin(addr, data, evicted, etag)){
+						for (unsigned i = 0 ; i < wperblock * bperword ; i++) {
+ 							 mem[etag + i] = evicted[i]; 
+						}
+					}
+						
+					cout << "miss " << time << " ";
+						
+						
+					for (unsigned i = 0; i < data.size() ; i++){
+						cout << i << "=" << hex << unsigned(data[i]) << " ";
+						
+					}
+					data.clear();
+					cout << endl;
+																			
+					cout << addr << " " << tostore << endl;	
 				}
 				
 				else if(cmd == "flush-req"){

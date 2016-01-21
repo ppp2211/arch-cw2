@@ -9,7 +9,7 @@ block::block(int bw, int wb)
 	
 block::~block(){}
 
-bool block::tag_match(int searchtag) const{
+bool block::tag_match(unsigned searchtag) const{
 	if(tag == searchtag){
 		return true;
 	}
@@ -29,7 +29,7 @@ int block::get_tag() const{
 
 void block::read_data(vector<uint8_t> &dest) const{
 	for(unsigned i = 0; i < data.size(); i++){
-		dest[i] = data[i];
+		dest.push_back(data[i]);
 	}
 }
 
@@ -45,7 +45,7 @@ void block::clean(){
 	dirty = false;
 }
 
-void block::store(vector<uint8_t> &src, int newtag){
+void block::store(vector<uint8_t> &src, unsigned newtag){
 	for(unsigned i = 0; i < src.size(); i++){
 		data[i] = src[i];
 	}

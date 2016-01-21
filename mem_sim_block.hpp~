@@ -12,7 +12,7 @@ using namespace std;
 			block(int bw, int wb);
 			~block();
 			
-			bool tag_match(int searchtag) const;			
+			bool tag_match(unsigned searchtag) const;			
 			bool is_valid() const;
 			bool is_dirty() const;
 			
@@ -22,10 +22,10 @@ using namespace std;
 			void validate();
 			void dirt();
 			void clean();
-			void store(const vector<uint8_t> &src, int newtag);
+			void store(vector<uint8_t> &src, int newtag);
 			
 		private:
-			int tag;
+			unsigned tag;
 			bool valid;
 			bool dirty;
 			vector<uint8_t> data;

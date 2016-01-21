@@ -1,1 +1,50 @@
-write-ack 0 0
+write-ack tostore 0
+byte 0
+ shift 18
+byte 0
+ shift 10
+byte 0
+ shift 8
+byte 0
+ shift 0
+miss 1 0=0 1=0 2=0 3=0 
+0 0
+read-ack 0 hit 1 0=0 1=0 2=0 3=0 
+write-ack tostore 8a3
+byte 0
+ shift 18
+byte 0
+ shift 10
+byte 8
+ shift 8
+byte a3
+ shift 0
+miss 1 0=0 1=0 2=8 3=a3 
+4 8a3
+write-ack tostore 1146
+byte 0
+ shift 18
+byte 0
+ shift 10
+byte 11
+ shift 8
+byte 46
+ shift 0
+miss 1 0=0 1=0 2=11 3=46 
+6 1146
+read-ack 1 miss 0 0=0 1=0 2=0 3=0 
+read-ack 1 miss 0 0=0 1=0 2=0 3=0 
+read-ack 0 hit 1 0=0 1=0 2=0 3=0 
+write-ack tostore 4d2
+byte 0
+ shift 18
+byte 0
+ shift 10
+byte 4
+ shift 8
+byte d2
+ shift 0
+miss 1 0=0 1=0 2=4 3=d2 
+10 4d2
+read-ack 0 miss 0 0=0 1=0 2=0 3=0 
+read-ack 0 miss 0 0=0 1=0 2=0 3=0 

@@ -10,8 +10,8 @@ class set{
 		set(int bw, int wb, int bs);
 		~set();
 		
-		bool getdata(int tag, vector<uint8_t> &data);
-		bool loadin(int tag, const vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
+		bool getdata(unsigned tag, vector<uint8_t> &data);
+		bool loadin(int tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag);
 		
 	private:
 		list<block> blocks;	

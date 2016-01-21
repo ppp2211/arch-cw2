@@ -17,8 +17,9 @@ cache::~cache(){}
 bool cache::cache_read(unsigned addr,vector<uint8_t> &data, int &index) {
 		
 	index = index_gen(addr);
+	unsigned tag = (addr/bytes)/wordblk;
 	//cout << "index generated " << endl;
-	return sets[index].getdata(addr, data);
+	return sets[index].getdata(tag, data);
 	//cout << "sets returned" << endl;
 	
 }
@@ -26,7 +27,9 @@ bool cache::cache_read(unsigned addr,vector<uint8_t> &data, int &index) {
 bool cache::cache_loadin(unsigned addr,vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
 	int index = index_gen(addr);
 	//cout << "index generated " << endl;
-	bool was_dirty = sets[index].loadin(addr, data, evicted, etag);	
+	unsigned tag = tag_gen(addr);
+	
+	bool was_dirty = sets[index].loadin(tag, data, evicted, etag);	
 		
 	return was_dirty;
 }
@@ -37,6 +40,13 @@ int cache::index_gen(uint32_t addr){
 	return blockaddr.quot % nsets;
 }
 
+unsigned cache::tag_gen(uint32_t addr){
+	return (addr/bytes)/wordblk;
+}	
+
+/*unsigned cache::offset_gen(uint32_t addr){	
+	return = (addr/bytes) % wordblk;
+}*/	
 
 /*int msb1(uint32_t n){
 	

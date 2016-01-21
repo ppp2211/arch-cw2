@@ -9,18 +9,18 @@ set::set(int bw, int wb, int bs)
 
 set::~set(){}
 
-bool set::getdata(unsigned tag, vector<uint8_t> &data){
+bool set::getdata(unsigned tag, vector<uint8_t> &data, unsigned offset){
 
 		for(list<block>::iterator i = blocks.begin(); i != blocks.end(); ++i){
 			
 			if((i->tag_match(tag)) && (i->is_valid())){
-				cout << "set: cond start" << endl;
-				i->read_data(data);
-				cout << "set: read_data" << endl;
+				//cout << "set: cond start" << endl;
+				i->read_data(data, offset);
+				//cout << "set: read_data" << endl;
 				blocks.push_front(*i);
-				cout << "set: block i moved to front" << endl;
+				//cout << "set: block i moved to front" << endl;
 				blocks.erase(i);
-				cout << "set: block i erased" << endl;
+				//cout << "set: block i erased" << endl;
 				return true;
 			}
 		}
@@ -28,7 +28,7 @@ bool set::getdata(unsigned tag, vector<uint8_t> &data){
 			
 }
 
-bool set::loadin(unsigned tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag){
+bool set::loadin(unsigned tag, vector<uint8_t> &data, vector<uint8_t> &evicted, int &etag, unsigned offset){
 	bool was_dirty = false;
 	
 	if(blocks.back().is_dirty()){

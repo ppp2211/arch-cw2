@@ -47,7 +47,7 @@ void block::clean(){
 
 void block::store(vector<uint8_t> &src, unsigned newtag){
 	for(unsigned i = 0; i < src.size(); i++){
-		data.push_back(src[i]);
+		data[i] = src[i];
 	}
 	tag = newtag;
 	validate();

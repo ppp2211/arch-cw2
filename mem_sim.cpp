@@ -27,10 +27,7 @@ int main(int argc, char *argv[]){
 	string line;
 	
 	while(getline(cin,line)){
-	
-	vector<uint8_t> data;
-	int index;
-		
+			
 		if(line.at(0) != '#'){
 			
 			istringstream row(line);
@@ -44,22 +41,25 @@ int main(int argc, char *argv[]){
 					unsigned addr;
 					row >> addr;
 					
-					//cout << addr << endl;
+					vector<uint8_t> data;
+					int index;
 					
-					//cout << "before hit check " << endl;
 					bool hit = mycache.cache_read(addr, data, index);
-					//cout << "after hit check " << endl;
 										
 					cout << index << " ";
+					
+					unsigned woffset = (addr/bperword) % wperblock;
+					
+					cout << "addr " << addr;
+					cout << " woffset " << woffset << " ";
 					
 					if(hit){
 						cout << "hit " << clhit << " "; 
 						
-						//cout << "before hit cout" << endl;
-				
-						
-						for (unsigned i = 0; i < data.size() ; i++){
-							cout << i << "=" << unsigned(data[i]) << " ";
+						unsigned offset = (wperblock-woffset-1)*bperword;
+											
+						for (unsigned i = offset; i < offset+bperword ; i++){
+							cout << hex << unsigned(data[i]);
 						}
 						
 						cout << endl;
@@ -68,15 +68,10 @@ int main(int argc, char *argv[]){
 					else{
 						
 						int time(0);
-												
-						//cout << " before mem load " << endl;
-												
-						for (unsigned i = 0; i < wperblock * bperword ; i++){
-						
+														
+						for (unsigned i = 0; i < wperblock * bperword ; i++){						
 							data.push_back(mem[addr+i]);
 						}
-						
-						//cout << "after mem load" << endl;
 									
 						vector<uint8_t> evicted;
 						int etag;
@@ -90,10 +85,13 @@ int main(int argc, char *argv[]){
 						cout << "miss " << time << " ";
 						
 						
-						for (unsigned i = 0; i < data.size() ; i++){
-							cout << i << "=" << unsigned(data[i]) << " ";
-							
+						unsigned offset = (wperblock-woffset-1)*bperword;
+											
+						for (unsigned i = offset; i < offset+bperword ; i++){
+							cout << hex << unsigned(data[i]);
 						}
+							
+						
 						data.clear();
 						cout << endl;
 					}
@@ -102,22 +100,38 @@ int main(int argc, char *argv[]){
 				
 				}
 			
-				else if(cmd == "write-req"){ // write code for a hit too pls fix too get a hex
+				/*else if(cmd == "write-req"){ // write code for a hit too pls fix too - get a hex
 				
 					cout << "write-ack ";
 					
 					unsigned addr;
-					uint32_t tostore;
-					row >> addr >> tostore;
+					unsigned tostore;
+					row >> addr >> hex >> tostore; 
 					
-					cout << "tostore " << hex << unsigned(tostore) << endl;
+					vector<uint8_t> data;
+					int index;
+												
+					bool hit = mycache.cache_read(addr, data, index);
+										
+					cout << index << " ";
 					
-					for (unsigned i = 0; i < wperblock * bperword ; i++){	
-						uint8_t byte = (tostore >> ((wperblock*bperword - (i+1)) * 8));				
-						cout << "byte " << hex << unsigned(byte) << endl;
-						cout << " shift " << ((wperblock*bperword - (i+1)) * 8) << endl;
-						data.push_back(byte);
+					unsigned woffset = (addr/bperword) % wperblock;
+					
+					for (unsigned i = 0; i < bperword ; i++){	
+						uint8_t byte = (tostore >> ((bperword - (i+1)) * 8));				
 					}
+					
+					if(hit){
+						cout << "hit " << clhit << " "; 
+											
+						for (unsigned i = woffset*bperword; i < bperword ; i++){
+							cout << hex << unsigned(data[i]);
+						}
+						
+						cout << endl;
+					}
+					
+					if 
 						
 								
 					vector<uint8_t> evicted;
@@ -133,14 +147,13 @@ int main(int argc, char *argv[]){
 						
 						
 					for (unsigned i = 0; i < data.size() ; i++){
-						cout << i << "=" << hex << unsigned(data[i]) << " ";
+						cout << hex << unsigned(data[i]);
 						
 					}
 					data.clear();
-					cout << endl;
-																			
-					cout << addr << " " << tostore << endl;	
-				}
+																								
+					cout << endl;	
+				}*/
 				
 				else if(cmd == "flush-req"){
 					cout << "flush-ack " << endl;	

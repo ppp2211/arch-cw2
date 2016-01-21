@@ -13,7 +13,7 @@ class cache{
 		cache(int bw, int wblk, int nblk, int nset, int clh, int clr, int clw);
 		~cache();
 		
-		int tag_gen(uint32_t addr);
+		unsigned tag_gen(uint32_t addr);
 		int index_gen(uint32_t addr);
 		
 		bool cache_read(uint32_t addr, vector<uint8_t> &data, int &index);

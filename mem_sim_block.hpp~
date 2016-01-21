@@ -22,7 +22,7 @@ using namespace std;
 			void validate();
 			void dirt();
 			void clean();
-			void store(vector<uint8_t> &src, int newtag);
+			void store(vector<uint8_t> &src, unsigned newtag);
 			
 		private:
 			unsigned tag;
